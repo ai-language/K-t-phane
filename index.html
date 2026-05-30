@@ -2534,13 +2534,14 @@ async function openMedia(id) {
     if(_blobUrl){URL.revokeObjectURL(_blobUrl);_blobUrl=null;}
     _blobUrl=URL.createObjectURL(new Blob([html],{type:'text/html'}));
     document.getElementById('nhg-overlay-frame').src=_blobUrl;
+    if('mediaSession'in navigator){const _te=document.querySelector('.item-title[data-id="'+id+'"]');try{navigator.mediaSession.metadata=new MediaMetadata({title:_te?_te.textContent.trim():id,artist:'NHG Kütüphane'});navigator.mediaSession.playbackState='playing';}catch(e){}}
   } else {
     document.getElementById('nhg-overlay-frame').srcdoc=html;
   }
   document.getElementById('nhg-overlay').classList.add('active');
 }
 window.addEventListener('pageshow',e=>{
-  if (_blobUrl) { URL.revokeObjectURL(_blobUrl); _blobUrl=null; }
+  if (_blobUrl&&!document.getElementById('nhg-overlay').classList.contains('active')) { URL.revokeObjectURL(_blobUrl); _blobUrl=null; }
   try{
     const d=JSON.parse(window.name||'{}');
     if(d&&d.nhg&&d.id&&d.t>0){localStorage.setItem('nhg_pos_'+d.id,d.t);window.name='';}

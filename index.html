@@ -2507,9 +2507,6 @@ async function openMedia(id) {
         ?'try{localStorage.setItem("nhg_pos_"+_id,n);}catch(e){}try{window.name=JSON.stringify({nhg:1,id:_id,t:n});}catch(e){}'
         :'try{window.parent.postMessage({nhg:1,id:_id,t:n},"*");}catch(e){}'
       )+'});'
-      +'a.addEventListener("play",function(){try{window.parent.postMessage({nhg_state:"play"},"*");}catch(e){}});'
-      +'a.addEventListener("pause",function(){try{window.parent.postMessage({nhg_state:"pause"},"*");}catch(e){}});'
-      +'window.addEventListener("message",function(e){if(!e.data||!e.data.nhg_cmd)return;if(e.data.nhg_cmd==="play"&&a.paused)a.play().catch(function(){});else if(e.data.nhg_cmd==="pause"&&!a.paused)a.pause();});'
     +'}'
     +'document.readyState==="loading"?document.addEventListener("DOMContentLoaded",_run):_run();'
     +(isIOS?'(function(){function _ab(){var b=document.createElement("button");b.innerHTML="‹";b.style.cssText="position:fixed;top:16px;right:16px;z-index:9999;background:#1a6b3c;color:#fff;border:none;border-radius:24px;padding:7px 15px;font-size:17px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.35);touch-action:manipulation;-webkit-tap-highlight-color:transparent;line-height:1;";b.addEventListener("click",function(){history.back();});document.body.appendChild(b);}document.readyState==="loading"?document.addEventListener("DOMContentLoaded",_ab):_ab();})();':'')
@@ -2989,13 +2986,7 @@ document.addEventListener('DOMContentLoaded',function(){
   inp.addEventListener('keydown',function(e){if(e.key==='Escape'){res.style.display='none';this.value='';this.blur();}});
 });
 window.addEventListener('message',function(e){
-  if(!e.data)return;
-  if(e.data.nhg&&e.data.id&&e.data.t>0)localStorage.setItem('nhg_pos_'+e.data.id,e.data.t);
-  if(e.data.nhg_state&&'mediaSession'in navigator){
-    var fr=document.getElementById('nhg-overlay-frame');
-    navigator.mediaSession.setActionHandler('play',function(){if(fr&&fr.contentWindow)fr.contentWindow.postMessage({nhg_cmd:'play'},'*');});
-    navigator.mediaSession.setActionHandler('pause',function(){if(fr&&fr.contentWindow)fr.contentWindow.postMessage({nhg_cmd:'pause'},'*');});
-  }
+  if(e.data&&e.data.nhg&&e.data.id&&e.data.t>0)localStorage.setItem('nhg_pos_'+e.data.id,e.data.t);
 });
 document.addEventListener('DOMContentLoaded',function(){
   document.getElementById('nhg-overlay-close').addEventListener('click',function(){

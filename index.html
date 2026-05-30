@@ -2507,22 +2507,9 @@ async function openMedia(id) {
         ?'try{localStorage.setItem("nhg_pos_"+_id,n);}catch(e){}try{window.name=JSON.stringify({nhg:1,id:_id,t:n});}catch(e){}'
         :'try{window.parent.postMessage({nhg:1,id:_id,t:n},"*");}catch(e){}'
       )+'});'
-      +(isIOS
-        ?'if("mediaSession"in navigator){'
-          +'try{'
-            +'navigator.mediaSession.metadata=new MediaMetadata({title:document.title||_id,artist:"NHG Kütüphane"});'
-            +'var _lk=0;document.addEventListener("visibilitychange",function(){if(document.hidden)_lk=Date.now();});'
-            +'navigator.mediaSession.setActionHandler("play",function(){var t=a.currentTime;a.play().catch(function(){a.load();a.addEventListener("canplay",function(){a.currentTime=t;a.play().catch(function(){});},{once:true});});});'
-            +'navigator.mediaSession.setActionHandler("pause",function(){if(Date.now()-_lk<500)return;a.pause();});'
-            +'a.addEventListener("play",function(){navigator.mediaSession.playbackState="playing";});'
-            +'a.addEventListener("pause",function(){navigator.mediaSession.playbackState="paused";});'
-          +'}catch(e){}'
-        +'}'
-        :''
-      )
     +'}'
     +'document.readyState==="loading"?document.addEventListener("DOMContentLoaded",_run):_run();'
-    +(isIOS?'(function(){function _ab(){var b=document.createElement("button");b.innerHTML="‹";b.style.cssText="position:fixed;top:16px;right:16px;z-index:9999;background:#1a6b3c;color:#fff;border:none;border-radius:24px;padding:7px 15px;font-size:17px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.35);touch-action:manipulation;-webkit-tap-highlight-color:transparent;line-height:1;";b.addEventListener("click",function(){try{window.parent.postMessage({nhg:"close"},"*");}catch(e){history.back();}});document.body.appendChild(b);}document.readyState==="loading"?document.addEventListener("DOMContentLoaded",_ab):_ab();})();':'')
+    +(isIOS?'(function(){function _ab(){var b=document.createElement("button");b.innerHTML="‹";b.style.cssText="position:fixed;top:16px;right:16px;z-index:9999;background:#1a6b3c;color:#fff;border:none;border-radius:24px;padding:7px 15px;font-size:17px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.35);touch-action:manipulation;-webkit-tap-highlight-color:transparent;line-height:1;";b.addEventListener("click",function(){history.back();});document.body.appendChild(b);}document.readyState==="loading"?document.addEventListener("DOMContentLoaded",_ab):_ab();})();':'')
   +'})();<'+'/scr'+'ipt>';
   const clipInj='<scr'+'ipt>(function(){'
     +'function _sync(t){'
@@ -2544,16 +2531,11 @@ async function openMedia(id) {
   +'})();<'+'/scr'+'ipt>';
   html=html.includes('</body>')?html.replace('</body>',inj+clipInj+'</body>'):html+inj+clipInj;
   if(isIOS){
-    if('caches'in window&&'serviceWorker'in navigator){
-      try{
-        const _sw=await Promise.race([navigator.serviceWorker.ready,new Promise(r=>setTimeout(()=>r(null),2000))]);
-        if(_sw){
-          const _nc=await caches.open('nhg-player');
-          await _nc.put('/K-t-phane/player',new Response(html,{headers:{'Content-Type':'text/html;charset=utf-8'}}));
-          location.href='/K-t-phane/player';
-          return;
-        }
-      }catch(e){}
+    if('caches'in window&&navigator.serviceWorker&&navigator.serviceWorker.controller){
+      caches.open('nhg-player').then(function(c){
+        return c.put('/K-t-phane/player',new Response(html,{headers:{'Content-Type':'text/html;charset=utf-8'}}));
+      }).then(function(){location.href='/K-t-phane/player';});
+      return;
     }
     if(_blobUrl){URL.revokeObjectURL(_blobUrl);_blobUrl=null;}
     _blobUrl=URL.createObjectURL(new Blob([html],{type:'text/html'}));
@@ -2561,11 +2543,11 @@ async function openMedia(id) {
     return;
   } else {
     document.getElementById('nhg-overlay-frame').srcdoc=html;
+    document.getElementById('nhg-overlay').classList.add('active');
   }
-  document.getElementById('nhg-overlay').classList.add('active');
 }
 window.addEventListener('pageshow',e=>{
-  if (_blobUrl&&!document.getElementById('nhg-overlay').classList.contains('active')) { URL.revokeObjectURL(_blobUrl); _blobUrl=null; }
+  if (_blobUrl) { URL.revokeObjectURL(_blobUrl); _blobUrl=null; }
   if('caches'in window)caches.open('nhg-player').then(function(c){c.delete('/K-t-phane/player');}).catch(function(){});
   try{
     const d=JSON.parse(window.name||'{}');
@@ -3013,25 +2995,18 @@ document.addEventListener('DOMContentLoaded',function(){
   inp.addEventListener('keydown',function(e){if(e.key==='Escape'){res.style.display='none';this.value='';this.blur();}});
 });
 window.addEventListener('message',function(e){
-  if(e.data&&e.data.nhg===1&&e.data.id&&e.data.t>0)localStorage.setItem('nhg_pos_'+e.data.id,e.data.t);
-  if(e.data&&e.data.nhg==='close'){
-    document.getElementById('nhg-overlay').classList.remove('active');
-    const fr=document.getElementById('nhg-overlay-frame');
-    fr.removeAttribute('src');fr.srcdoc='';
-    if(_blobUrl){URL.revokeObjectURL(_blobUrl);_blobUrl=null;}
-  }
+  if(e.data&&e.data.nhg&&e.data.id&&e.data.t>0)localStorage.setItem('nhg_pos_'+e.data.id,e.data.t);
 });
 document.addEventListener('DOMContentLoaded',function(){
   document.getElementById('nhg-overlay-close').addEventListener('click',function(){
     document.getElementById('nhg-overlay').classList.remove('active');
-    const fr=document.getElementById('nhg-overlay-frame');
-    fr.removeAttribute('src');fr.srcdoc='';
+    document.getElementById('nhg-overlay-frame').srcdoc='';
     if(_blobUrl){URL.revokeObjectURL(_blobUrl);_blobUrl=null;}
   });
 });
 document.addEventListener('DOMContentLoaded',initApp);
 if(document.readyState!=='loading')initApp();
 </script>
-<div id="nhg-overlay"><div id="nhg-overlay-bar"><span></span><button id="nhg-overlay-close" title="Kapat">‹</button></div><iframe id="nhg-overlay-frame" allow="autoplay"></iframe></div>
+<div id="nhg-overlay"><div id="nhg-overlay-bar"><span></span><button id="nhg-overlay-close" title="Kapat">‹</button></div><iframe id="nhg-overlay-frame"></iframe></div>
 </body>
 </html>

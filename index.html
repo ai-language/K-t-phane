@@ -2532,8 +2532,18 @@ async function openMedia(id) {
   html=html.includes('</body>')?html.replace('</body>',inj+clipInj+'</body>'):html+inj+clipInj;
   if(isIOS){
     if(_blobUrl){URL.revokeObjectURL(_blobUrl);_blobUrl=null;}
+    if(navigator.standalone===true&&'serviceWorker'in navigator){
+      try{
+        await navigator.serviceWorker.ready;
+        const _c=await caches.open('nhg-player');
+        await _c.put('/K-t-phane/player',new Response(html,{headers:{'Content-Type':'text/html;charset=utf-8'}}));
+        location.href='/K-t-phane/player';
+        return;
+      }catch(e){}
+    }
     _blobUrl=URL.createObjectURL(new Blob([html],{type:'text/html'}));
     location.href=_blobUrl;
+    return;
   } else {
     document.getElementById('nhg-overlay-frame').srcdoc=html;
     document.getElementById('nhg-overlay').classList.add('active');
@@ -2541,6 +2551,7 @@ async function openMedia(id) {
 }
 window.addEventListener('pageshow',e=>{
   if (_blobUrl) { URL.revokeObjectURL(_blobUrl); _blobUrl=null; }
+  if('caches'in window)caches.open('nhg-player').then(c=>c.delete('/K-t-phane/player')).catch(function(){});
   try{
     const d=JSON.parse(window.name||'{}');
     if(d&&d.nhg&&d.id&&d.t>0){localStorage.setItem('nhg_pos_'+d.id,d.t);window.name='';}
@@ -2935,6 +2946,7 @@ function resetAll() {
 
 function initApp() {
   if(initApp._done)return; initApp._done=true;
+  if('serviceWorker'in navigator)navigator.serviceWorker.register('/K-t-phane/sw.js').catch(function(){});
 
   loadState();
   loadMediaState();

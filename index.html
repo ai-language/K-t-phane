@@ -2531,10 +2531,21 @@ async function openMedia(id) {
   +'})();<'+'/scr'+'ipt>';
   html=html.includes('</body>')?html.replace('</body>',inj+clipInj+'</body>'):html+inj+clipInj;
   if(isIOS){
+    if('caches'in window&&'serviceWorker'in navigator){
+      try{
+        const _sw=await Promise.race([navigator.serviceWorker.ready,new Promise(r=>setTimeout(()=>r(null),2000))]);
+        if(_sw){
+          const _nc=await caches.open('nhg-player');
+          await _nc.put('/K-t-phane/player',new Response(html,{headers:{'Content-Type':'text/html;charset=utf-8'}}));
+          location.href='/K-t-phane/player';
+          return;
+        }
+      }catch(e){}
+    }
     if(_blobUrl){URL.revokeObjectURL(_blobUrl);_blobUrl=null;}
     _blobUrl=URL.createObjectURL(new Blob([html],{type:'text/html'}));
-    document.getElementById('nhg-overlay-frame').src=_blobUrl;
-    if('mediaSession'in navigator){const _te=document.querySelector('.item-title[data-id="'+id+'"]');try{navigator.mediaSession.metadata=new MediaMetadata({title:_te?_te.textContent.trim():id,artist:'NHG Kütüphane'});navigator.mediaSession.playbackState='playing';}catch(e){}}
+    location.href=_blobUrl;
+    return;
   } else {
     document.getElementById('nhg-overlay-frame').srcdoc=html;
   }
@@ -2542,6 +2553,7 @@ async function openMedia(id) {
 }
 window.addEventListener('pageshow',e=>{
   if (_blobUrl&&!document.getElementById('nhg-overlay').classList.contains('active')) { URL.revokeObjectURL(_blobUrl); _blobUrl=null; }
+  if('caches'in window)caches.open('nhg-player').then(function(c){c.delete('/K-t-phane/player');}).catch(function(){});
   try{
     const d=JSON.parse(window.name||'{}');
     if(d&&d.nhg&&d.id&&d.t>0){localStorage.setItem('nhg_pos_'+d.id,d.t);window.name='';}
@@ -2936,6 +2948,7 @@ function resetAll() {
 
 function initApp() {
   if(initApp._done)return; initApp._done=true;
+  if('serviceWorker'in navigator)navigator.serviceWorker.register('/K-t-phane/sw.js').catch(function(){});
 
   loadState();
   loadMediaState();

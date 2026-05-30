@@ -1,0 +1,12 @@
+{
+  "name": "NHG Kütüphane",
+  "short_name": "NHG",
+  "id": "nhg-kutuphanesi",
+  "start_url": "/K-t-phane/",
+  "scope": "/K-t-phane/",
+  "display": "standalone",
+  "background_color": "#f0f4f8",
+  "theme_color": "#1a6b3c",
+  "lang": "nl",
+  "icons": []
+}

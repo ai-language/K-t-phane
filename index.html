@@ -2507,10 +2507,6 @@ async function openMedia(id) {
         ?'try{localStorage.setItem("nhg_pos_"+_id,n);}catch(e){}try{window.name=JSON.stringify({nhg:1,id:_id,t:n});}catch(e){}'
         :'try{window.parent.postMessage({nhg:1,id:_id,t:n},"*");}catch(e){}'
       )+'});'
-      +'if("mediaSession"in navigator){'
-        +'navigator.mediaSession.setActionHandler("play",function(){if(a.paused)a.play().catch(function(){});});'
-        +'navigator.mediaSession.setActionHandler("pause",function(){if(!a.paused)a.pause();});'
-      +'}'
     +'}'
     +'document.readyState==="loading"?document.addEventListener("DOMContentLoaded",_run):_run();'
     +(isIOS?'(function(){function _ab(){var b=document.createElement("button");b.innerHTML="‹";b.style.cssText="position:fixed;top:16px;right:16px;z-index:9999;background:#1a6b3c;color:#fff;border:none;border-radius:24px;padding:7px 15px;font-size:17px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.35);touch-action:manipulation;-webkit-tap-highlight-color:transparent;line-height:1;";b.addEventListener("click",function(){history.back();});document.body.appendChild(b);}document.readyState==="loading"?document.addEventListener("DOMContentLoaded",_ab):_ab();})();':'')
@@ -2534,7 +2530,7 @@ async function openMedia(id) {
     +'},true);'
   +'})();<'+'/scr'+'ipt>';
   html=html.includes('</body>')?html.replace('</body>',inj+clipInj+'</body>'):html+inj+clipInj;
-  if(isIOS && navigator.standalone===false){
+  if(isIOS){
     if(_blobUrl){URL.revokeObjectURL(_blobUrl);_blobUrl=null;}
     _blobUrl=URL.createObjectURL(new Blob([html],{type:'text/html'}));
     location.href=_blobUrl;
@@ -3002,6 +2998,6 @@ document.addEventListener('DOMContentLoaded',function(){
 document.addEventListener('DOMContentLoaded',initApp);
 if(document.readyState!=='loading')initApp();
 </script>
-<div id="nhg-overlay"><div id="nhg-overlay-bar"><span></span><button id="nhg-overlay-close" title="Kapat">‹</button></div><iframe id="nhg-overlay-frame" allow="autoplay"></iframe></div>
+<div id="nhg-overlay"><div id="nhg-overlay-bar"><span></span><button id="nhg-overlay-close" title="Kapat">‹</button></div><iframe id="nhg-overlay-frame"></iframe></div>
 </body>
 </html>

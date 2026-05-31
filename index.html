@@ -2531,8 +2531,9 @@ async function openMedia(id) {
   +'})();<'+'/scr'+'ipt>';
   html=html.includes('</body>')?html.replace('</body>',inj+clipInj+'</body>'):html+inj+clipInj;
   if(isIOS){
-    try{sessionStorage.setItem('nhg-player-html-'+id,html);}catch(e){window.name=JSON.stringify({nhg:true,html:html,id:id});}
-    location.href='/K-t-phane/player.html?id='+id;
+    window.name=JSON.stringify({nhg:true,html:html,id:id});
+    try{sessionStorage.setItem('nhg-player-html-'+id,html);sessionStorage.setItem('nhg-id',id);}catch(e){}
+    location.href='/K-t-phane/player.html?id='+id+'#nhg';
   } else {
     document.getElementById('nhg-overlay-frame').srcdoc=html;
     document.getElementById('nhg-overlay').classList.add('active');

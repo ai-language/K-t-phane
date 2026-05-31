@@ -2510,7 +2510,7 @@ async function openMedia(id) {
       )+'});'
     +'}'
     +'document.readyState==="loading"?document.addEventListener("DOMContentLoaded",_run):_run();'
-    +(isIOS?'(function(){var _u="'+location.href+'";function _ab(){var b=document.createElement("button");b.innerHTML="‹";b.style.cssText="position:fixed;top:16px;right:16px;z-index:9999;background:#1a6b3c;color:#fff;border:none;border-radius:24px;padding:7px 15px;font-size:17px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.35);touch-action:manipulation;-webkit-tap-highlight-color:transparent;line-height:1;";b.addEventListener("click",function(){location.href=_u;});document.body.appendChild(b);}document.readyState==="loading"?document.addEventListener("DOMContentLoaded",_ab):_ab();})();':'')
+    +(isIOS?'(function(){function _ab(){var b=document.createElement("button");b.innerHTML="‹";b.style.cssText="position:fixed;top:16px;right:16px;z-index:9999;background:#1a6b3c;color:#fff;border:none;border-radius:24px;padding:7px 15px;font-size:17px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.35);touch-action:manipulation;-webkit-tap-highlight-color:transparent;line-height:1;";b.addEventListener("click",function(){history.back();});document.body.appendChild(b);}document.readyState==="loading"?document.addEventListener("DOMContentLoaded",_ab):_ab();})();':'')
   +'})();<'+'/scr'+'ipt>';
   const clipInj='<scr'+'ipt>(function(){'
     +'function _sync(t){'
@@ -2530,15 +2530,11 @@ async function openMedia(id) {
       +'navigator.clipboard.writeText=function(t){_sync(t);navigator.clipboard.writeText=_ow;return Promise.resolve();};'
     +'},true);'
   +'})();<'+'/scr'+'ipt>';
-  const _sfx='html,body,:root{-webkit-text-size-adjust:100%!important;text-size-adjust:100%!important;font-size:16px!important}';
-  if(html.includes('<style>'))html=html.replace('<style>','<style>'+_sfx);
-  else if(html.includes('</head>'))html=html.replace('</head>','<style>'+_sfx+'</style></head>');
   html=html.includes('</body>')?html.replace('</body>',inj+clipInj+'</body>'):html+inj+clipInj;
   if(isIOS){
-    history.pushState({nhgOverlay:id},'',location.href);
-    document.open();
-    document.write(html);
-    document.close();
+    if(_blobUrl){URL.revokeObjectURL(_blobUrl);_blobUrl=null;}
+    _blobUrl=URL.createObjectURL(new Blob([html],{type:'text/html'}));
+    location.href=_blobUrl;
   } else {
     document.getElementById('nhg-overlay-frame').srcdoc=html;
     document.getElementById('nhg-overlay').classList.add('active');

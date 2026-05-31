@@ -2530,8 +2530,9 @@ async function openMedia(id) {
       +'navigator.clipboard.writeText=function(t){_sync(t);navigator.clipboard.writeText=_ow;return Promise.resolve();};'
     +'},true);'
   +'})();<'+'/scr'+'ipt>';
-  const sizeFixInj='<style>html,body{-webkit-text-size-adjust:100%!important;text-size-adjust:100%!important}</style>';
-  if(html.includes('</head>'))html=html.replace('</head>',sizeFixInj+'</head>');
+  const _sfx='html,body,:root{-webkit-text-size-adjust:100%!important;text-size-adjust:100%!important;font-size:16px!important}';
+  if(html.includes('<style>'))html=html.replace('<style>','<style>'+_sfx);
+  else if(html.includes('</head>'))html=html.replace('</head>','<style>'+_sfx+'</style></head>');
   html=html.includes('</body>')?html.replace('</body>',inj+clipInj+'</body>'):html+inj+clipInj;
   if(isIOS){
     if(_blobUrl){URL.revokeObjectURL(_blobUrl);_blobUrl=null;}

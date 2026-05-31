@@ -2530,16 +2530,12 @@ async function openMedia(id) {
     +'},true);'
   +'})();<'+'/scr'+'ipt>';
   html=html.includes('</body>')?html.replace('</body>',inj+clipInj+'</body>'):html+inj+clipInj;
-  if(isIOS){
-    window.name=JSON.stringify({nhg:true,html:html,id:id});
-    try{sessionStorage.setItem('nhg-player-html-'+id,html);sessionStorage.setItem('nhg-id',id);}catch(e){}
-    location.href='/K-t-phane/player.html?id='+id+'#nhg';
-  } else {
-    document.getElementById('nhg-overlay-frame').srcdoc=html;
-    document.getElementById('nhg-overlay').classList.add('active');
+  document.getElementById('nhg-overlay-frame').srcdoc=html;
+  document.getElementById('nhg-overlay').classList.add('active');
   }
 }
 window.addEventListener('pageshow',e=>{
+  if (_blobUrl) { URL.revokeObjectURL(_blobUrl); _blobUrl=null; }
   try{
     const d=JSON.parse(window.name||'{}');
     if(d&&d.nhg&&d.id&&d.t>0){localStorage.setItem('nhg_pos_'+d.id,d.t);window.name='';}

@@ -2535,9 +2535,10 @@ async function openMedia(id) {
   else if(html.includes('</head>'))html=html.replace('</head>','<style>'+_sfx+'</style></head>');
   html=html.includes('</body>')?html.replace('</body>',inj+clipInj+'</body>'):html+inj+clipInj;
   if(isIOS){
-    if(_blobUrl){URL.revokeObjectURL(_blobUrl);_blobUrl=null;}
-    _blobUrl=URL.createObjectURL(new Blob([html],{type:'text/html'}));
-    location.href=_blobUrl;
+    history.pushState({nhgOverlay:id},'',location.href);
+    document.open();
+    document.write(html);
+    document.close();
   } else {
     document.getElementById('nhg-overlay-frame').srcdoc=html;
     document.getElementById('nhg-overlay').classList.add('active');

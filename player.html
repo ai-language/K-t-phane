@@ -33,39 +33,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
     return;
   }
 
-  document.getElementById('player').innerHTML = _html;
-
-  if('mediaSession'in navigator) {
-    try {
-      navigator.mediaSession.metadata = new MediaMetadata({
-        title: _id,
-        artist: 'NHG Kütüphane'
-      });
-      const _audio = document.querySelector('audio');
-      if(_audio) {
-        if(_pos>0) _audio.currentTime = _pos;
-        navigator.mediaSession.setActionHandler('play', function(){
-          _audio.play().catch(function(){
-            _audio.load();
-            _audio.addEventListener('canplay', function(){
-              _audio.currentTime = _pos;
-              _audio.play().catch(function(){});
-            }, {once: true});
-          });
-        });
-        _audio.addEventListener('play', function(){
-          navigator.mediaSession.playbackState = 'playing';
-        });
-        _audio.addEventListener('pause', function(){
-          navigator.mediaSession.playbackState = 'paused';
-        });
-        _audio.addEventListener('timeupdate', function(){
-          const n = Math.floor(_audio.currentTime);
-          try { localStorage.setItem('nhg_pos_'+_id, n); } catch(e) {}
-        });
-      }
-    } catch(e) {}
-  }
+  const _frame = document.createElement('iframe');
+  _frame.srcdoc = _html;
+  _frame.style.cssText = 'position:fixed;inset:0;border:none;width:100%;height:100%;margin:0;padding:0;';
+  document.body.style.cssText = 'margin:0;padding:0;overflow:hidden;';
+  document.getElementById('player').innerHTML = '';
+  document.getElementById('player').appendChild(_frame);
 })();
 </script>
 </body>

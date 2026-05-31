@@ -2531,22 +2531,14 @@ async function openMedia(id) {
   +'})();<'+'/scr'+'ipt>';
   html=html.includes('</body>')?html.replace('</body>',inj+clipInj+'</body>'):html+inj+clipInj;
   if(isIOS){
-    if(navigator.standalone===true){
-      document.getElementById('nhg-overlay-frame').srcdoc=html;
-      document.getElementById('nhg-overlay').classList.add('active');
-      history.pushState({nhg:id},'','/K-t-phane/player');
-    } else {
-      if(_blobUrl){URL.revokeObjectURL(_blobUrl);_blobUrl=null;}
-      _blobUrl=URL.createObjectURL(new Blob([html],{type:'text/html'}));
-      location.href=_blobUrl;
-    }
+    localStorage.setItem('nhg-player-html-'+id,html);
+    location.href='/K-t-phane/player.html?id='+id;
   } else {
     document.getElementById('nhg-overlay-frame').srcdoc=html;
     document.getElementById('nhg-overlay').classList.add('active');
   }
 }
 window.addEventListener('pageshow',e=>{
-  if (_blobUrl) { URL.revokeObjectURL(_blobUrl); _blobUrl=null; }
   try{
     const d=JSON.parse(window.name||'{}');
     if(d&&d.nhg&&d.id&&d.t>0){localStorage.setItem('nhg_pos_'+d.id,d.t);window.name='';}
@@ -2999,7 +2991,6 @@ document.addEventListener('DOMContentLoaded',function(){
     document.getElementById('nhg-overlay').classList.remove('active');
     document.getElementById('nhg-overlay-frame').srcdoc='';
     if(_blobUrl){URL.revokeObjectURL(_blobUrl);_blobUrl=null;}
-    if(navigator.standalone===true)history.back();
   });
 });
 document.addEventListener('DOMContentLoaded',initApp);

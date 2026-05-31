@@ -18,8 +18,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 <script>
 (function(){
   let _id = new URL(location.href).searchParams.get('id');
-  let _html = _id ? localStorage.getItem('nhg-player-html-'+_id) : null;
-  let _pos = parseFloat(localStorage.getItem('nhg_pos_'+_id)||'0')||0;
+  let _html = _id ? (sessionStorage.getItem('nhg-player-html-'+_id) || localStorage.getItem('nhg-player-html-'+_id)) : null;
+  let _pos = parseFloat(sessionStorage.getItem('nhg_pos_'+_id) || localStorage.getItem('nhg_pos_'+_id) || '0')||0;
 
   if(!_html && !_id) {
     try {

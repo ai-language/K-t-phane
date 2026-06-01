@@ -2533,6 +2533,7 @@ async function openMedia(id) {
   html=html.includes('</body>')?html.replace('</body>',inj+clipInj+'</body>'):html+inj+clipInj;
   if(isIOS){
     html=html.replace('width=device-width','width='+window.screen.width);
+    html=html.replace('<style>','<style>html,body{-webkit-text-size-adjust:100%!important;text-size-adjust:100%!important}');
     if(_blobUrl){URL.revokeObjectURL(_blobUrl);_blobUrl=null;}
     _blobUrl=URL.createObjectURL(new Blob([html],{type:'text/html'}));
     location.href=_blobUrl;

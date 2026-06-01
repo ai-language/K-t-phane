@@ -2534,6 +2534,9 @@ async function openMedia(id) {
   if(isIOS){
     var _liw=window.innerWidth;
     html=html.replace('width=device-width','width='+_liw);
+    html=html.replace('initial-scale=1.0','initial-scale='+(window.screen.width/_liw).toFixed(4));
+    var _cssInj='<style>.tr-original,.tr-trans-block{height:auto!important;min-height:5.5rem}.ai-disclaimer{font-size:12px!important}.transcript-body{max-height:65vh!important}</style>';
+    html=html.includes('</head>')?html.replace('</head>',_cssInj+'</head>'):html+_cssInj;
     if(_blobUrl){URL.revokeObjectURL(_blobUrl);_blobUrl=null;}
     _blobUrl=URL.createObjectURL(new Blob([html],{type:'text/html'}));
     location.href=_blobUrl;

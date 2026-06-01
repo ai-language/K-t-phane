@@ -2534,7 +2534,6 @@ async function openMedia(id) {
   if(isIOS){
     var _liw=window.innerWidth;
     html=html.replace('width=device-width','width='+_liw);
-    html=html.replace('initial-scale=1.0','initial-scale='+(window.screen.width/_liw).toFixed(4));
     if(_blobUrl){URL.revokeObjectURL(_blobUrl);_blobUrl=null;}
     _blobUrl=URL.createObjectURL(new Blob([html],{type:'text/html'}));
     location.href=_blobUrl;

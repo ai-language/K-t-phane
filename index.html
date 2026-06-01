@@ -2533,10 +2533,8 @@ async function openMedia(id) {
   html=html.includes('</body>')?html.replace('</body>',inj+clipInj+'</body>'):html+inj+clipInj;
   if(isIOS){
     var _liw=window.innerWidth;
-    html=html.replace('width=device-width','width='+_liw);
-    html=html.replace('initial-scale=1.0','initial-scale='+(window.screen.width/_liw).toFixed(4));
-    var _cssInj='<style>.tr-original,.tr-trans-block{height:auto!important;min-height:5.5rem}.ai-disclaimer{font-size:12px!important}.transcript-body{max-height:65vh!important}</style>';
-    html=html.includes('</head>')?html.replace('</head>',_cssInj+'</head>'):html+_cssInj;
+    var _diagInj='<scr'+'ipt>window.addEventListener("load",function(){var d=document.createElement("div");d.style.cssText="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.9);color:#0f0;font-family:monospace;font-size:11px;padding:14px 16px;border-radius:10px;z-index:99999;text-align:left;line-height:1.6;max-width:280px;overflow-y:auto;max-height:80vh";d.innerHTML="<b style=\"color:#0ff\">VIEWPORT TEST</b><br>screen.width: "+window.screen.width+"<br>screen.height: "+window.screen.height+"<br>innerWidth: "+window.innerWidth+"<br>innerHeight: "+window.innerHeight+"<br>clientWidth: "+document.documentElement.clientWidth+"<br>dPR: "+window.devicePixelRatio+"<br>injected_liw: '+_liw+'<br><br><b style=\"color:#0ff\">CSS</b><br>body.clientWidth: "+document.body.clientWidth+"<br>body.offsetWidth: "+document.body.offsetWidth+"<br><br><b style=\"color:#0ff\">LAYOUT</b><br>--ph: "+getComputedStyle(document.documentElement).getPropertyValue(\"--ph\")+"<br>--fz: "+getComputedStyle(document.documentElement).getPropertyValue(\"--fz")+"<br><br><b style=\"color:#f0f\">viewport meta:</b><br>"+document.querySelector(\"meta[name=viewport]\").content";document.body.appendChild(d);setTimeout(function(){d.remove();},12000);});<'+'/scr'+'ipt>';
+    html=html.includes('</head>')?html.replace('</head>',_diagInj+'</head>'):html+_diagInj;
     if(_blobUrl){URL.revokeObjectURL(_blobUrl);_blobUrl=null;}
     _blobUrl=URL.createObjectURL(new Blob([html],{type:'text/html'}));
     location.href=_blobUrl;

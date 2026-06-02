@@ -2534,6 +2534,13 @@ async function openMedia(id) {
   if(isIOS){
     var _liw=window.innerWidth;
     html=html.replace('width=device-width','width='+_liw);
+    var _fzClampInj='<scr'+'ipt>(function(){'
+      +'var _osp=CSSStyleDeclaration.prototype.setProperty;'
+      +'CSSStyleDeclaration.prototype.setProperty=function(p,v,pr){'
+      +'if(p==="--fz"){var n=parseFloat(v)||0;if(n<-14)n=-14;v=n+"px";}'
+      +'return _osp.call(this,p,v,pr);};'
+      +'})();<'+'/scr'+'ipt>';
+    html=html.includes('</head>')?html.replace('</head>',_fzClampInj+'</head>'):html+_fzClampInj;
     if(_blobUrl){URL.revokeObjectURL(_blobUrl);_blobUrl=null;}
     _blobUrl=URL.createObjectURL(new Blob([html],{type:'text/html'}));
     location.href=_blobUrl;

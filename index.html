@@ -2535,7 +2535,7 @@ async function openMedia(id) {
     var _liw=window.innerWidth;
     html=html.replace('width=device-width','width='+_liw);
     html=html.replace('initial-scale=1.0','initial-scale='+(window.screen.width/_liw).toFixed(4));
-    var _cssInj='<style>.ai-disclaimer{font-size:calc(10px + var(--fz,0px)*0.4)!important;line-height:calc(1.4 - var(--fz,0px)*0.002)!important}html .transcript-body{font-size:calc(19px + var(--fz,0px))!important;max-height:68vh!important;line-height:calc(2 - var(--fz,0px)*0.0035)!important}html .word{line-height:calc(1.6 + var(--fz,0px)*0.008)!important}</style>';
+    var _cssInj='<style>.tr-original{height:calc(5.5rem + var(--ph,0px))!important;overflow:hidden!important;font-size:calc(16px + var(--fz,0px))!important;line-height:calc(1.5 + var(--fz,0px)*0.01)!important}.tr-trans-block{height:calc(5.5rem + var(--ph,0px))!important;overflow:hidden!important;font-size:calc(17px + var(--fz,0px))!important;line-height:calc(1.5 + var(--fz,0px)*0.01)!important}.ai-disclaimer{font-size:calc(10px + var(--fz,0px)*0.4)!important;line-height:calc(1.4 - var(--fz,0px)*0.002)!important}html .transcript-body{font-size:calc(19px + var(--fz,0px))!important;max-height:68vh!important;line-height:calc(2 - var(--fz,0px)*0.0035)!important}html .word{line-height:calc(1.6 + var(--fz,0px)*0.008)!important}</style>';
     html=html.includes('</head>')?html.replace('</head>',_cssInj+'</head>'):html+_cssInj;
 
     // Test panel CSS inject

@@ -2568,7 +2568,7 @@ window.addEventListener('pageshow',e=>{
     if(d&&d.nhg&&d.id&&d.t>0){localStorage.setItem('nhg_pos_'+d.id,d.t);}
     if(d&&d.pod_zoom&&Math.abs(d.pod_zoom-_zoomLevel)>0.01){
       _zoomLevel=d.pod_zoom;localStorage.setItem('pod_zoom',_zoomLevel);
-      if(navigator.standalone)document.documentElement.style.zoom=_zoomLevel;_updateZoomLabel();
+      document.documentElement.style.zoom=_zoomLevel;_updateZoomLabel();
     }
     window.name='';
   }catch(e){}
@@ -3027,11 +3027,11 @@ if(document.readyState!=='loading')initApp();
 
 // --- ZOOM CONTROL ---
 var _zoomLevel=parseFloat(localStorage.getItem('pod_zoom')||'1');
-if(navigator.standalone)document.documentElement.style.zoom=_zoomLevel;
+document.documentElement.style.zoom=_zoomLevel;
 function _updateZoomLabel(){var l=document.getElementById('_lib_zlbl');if(l)l.textContent=Math.round(_zoomLevel*100)+'%';}
 function adjZoom(d){
   _zoomLevel=Math.min(1.5,Math.max(0.7,parseFloat((_zoomLevel+d).toFixed(1))));
-  if(navigator.standalone)document.documentElement.style.zoom=_zoomLevel;
+  document.documentElement.style.zoom=_zoomLevel;
   localStorage.setItem('pod_zoom',_zoomLevel);
   _updateZoomLabel();
 }

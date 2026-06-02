@@ -2535,7 +2535,7 @@ async function openMedia(id) {
     var _liw=window.innerWidth;
     html=html.replace('width=device-width','width='+_liw);
     html=html.replace('initial-scale=1.0','initial-scale='+(window.screen.width/_liw).toFixed(4));
-    var _cssInj='<style>.tr-original,.tr-trans-block{height:auto!important;min-height:5.5rem}.ai-disclaimer{font-size:12px!important}.transcript-body{max-height:65vh!important}</style>';
+    var _cssInj='<style>.ai-disclaimer{font-size:calc(10px + var(--fz,0px)*0.25)!important}.transcript-body{max-height:68vh!important}</style>';
     html=html.includes('</head>')?html.replace('</head>',_cssInj+'</head>'):html+_cssInj;
 
     // Test panel CSS inject

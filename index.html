@@ -2532,9 +2532,10 @@ async function openMedia(id) {
   +'})();<'+'/scr'+'ipt>';
   html=html.includes('</body>')?html.replace('</body>',inj+clipInj+'</body>'):html+inj+clipInj;
   if(isIOS){
+    if(navigator.standalone===false){var _liw=window.innerWidth;html=html.replace('width=device-width','width='+_liw);}
     var _pz=(typeof _zoomLevel!=='undefined'?_zoomLevel:1);
     var _zoomInj='<scr'+'ipt>(function(){'
-      +'var _z='+_pz.toFixed(2)+',_min=0.7,_max=1.5,_step=0.1,_pwa=!!navigator.standalone;'
+      +'var _z='+_pz.toFixed(2)+',_min=0.4,_max=1.5,_step=0.1,_pwa=!!navigator.standalone;'
       +'function _applyZ(v){if(_pwa)document.documentElement.style.zoom=v;else document.body.style.zoom=v;}'
       +'_applyZ(_z);'
       +'function _saveZ(){try{var d=JSON.parse(window.name||"{}");d.pod_zoom=_z;window.name=JSON.stringify(d);}catch(e){window.name=JSON.stringify({pod_zoom:_z});}}'
@@ -3031,7 +3032,7 @@ var _zoomLevel=parseFloat(localStorage.getItem('pod_zoom')||'1');
 document.documentElement.style.zoom=_zoomLevel;
 function _updateZoomLabel(){var l=document.getElementById('_lib_zlbl');if(l)l.textContent=Math.round(_zoomLevel*100)+'%';}
 function adjZoom(d){
-  _zoomLevel=Math.min(1.5,Math.max(0.7,parseFloat((_zoomLevel+d).toFixed(1))));
+  _zoomLevel=Math.min(1.5,Math.max(0.4,parseFloat((_zoomLevel+d).toFixed(1))));
   document.documentElement.style.zoom=_zoomLevel;
   localStorage.setItem('pod_zoom',_zoomLevel);
   _updateZoomLabel();

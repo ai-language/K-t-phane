@@ -62,8 +62,6 @@
   .tab-content { display: none !important; }
   .tab-content.active { display: block !important; }
   .tab-btn { touch-action: manipulation; -webkit-tap-highlight-color: rgba(0,0,0,0); }
-  .item-title.has-media { touch-action: manipulation; }
-  .content { touch-action: pan-x pan-y; }
   
   /* Sync Modal */
   .sync-overlay { position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.55);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px; }
@@ -2538,8 +2536,14 @@ async function openMedia(id) {
     var _pz=(typeof _zoomOffline!=='undefined'?_zoomOffline:1);
     var _zoomInj='<scr'+'ipt>(function(){'
       +'var _z='+_pz.toFixed(2)+',_min=0.4,_max=1.5,_step=0.1,_pwa=!!navigator.standalone;'
-      +'function _applyZ(v){if(_pwa)document.documentElement.style.zoom=v;else document.body.style.zoom=v;}'
+      +'function _applyZ(v){document.documentElement.style.zoom=v;}'
       +'_applyZ(_z);'
+      +'if(!_pwa){'
+      +'var _vp=document.querySelector("meta[name=viewport]");'
+      +'if(_vp&&_vp.content.indexOf("user-scalable")===-1)_vp.content+=",user-scalable=no,maximum-scale=1.0";'
+      +'(function _dtp(){var _p=document.querySelector(".tr-panel");if(!_p){setTimeout(_dtp,300);return;}'
+      +'_p.addEventListener("touchstart",function(e){if(e.touches.length>=2)e.stopImmediatePropagation();},{capture:true,passive:true});})();'
+      +'}'
       +'function _saveZ(){try{var d=JSON.parse(window.name||"{}");d.pod_zoom_off=_z;window.name=JSON.stringify(d);}catch(e){window.name=JSON.stringify({pod_zoom_off:_z});}}'
       +'function _showToast(msg){var t=document.getElementById("_zt");if(!t){t=document.createElement("div");t.id="_zt";t.style.cssText="position:fixed;bottom:72px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.78);color:#fff;padding:6px 14px;border-radius:16px;font-size:13px;z-index:99999;pointer-events:none;transition:opacity .6s;white-space:nowrap";document.body.appendChild(t);}t.textContent=msg;t.style.opacity="1";clearTimeout(t._t);t._t=setTimeout(function(){t.style.opacity="0";},2200);}'
       +'function _adjZ(d){_z=Math.min(_max,Math.max(_min,parseFloat((_z+d).toFixed(1))));_applyZ(_z);var lbl=document.getElementById("_zbl");if(lbl)lbl.textContent=Math.round(_z*100)+"%";_showToast("Zoom: "+Math.round(_z*100)+"%");_saveZ();}'
@@ -3040,47 +3044,6 @@ function adjZoom(d){
   _updateZoomLabel();
 }
 _updateZoomLabel();
-// 2-parmak pinch → özel zoom (adjZoom ile entegre)
-(function(){
-  var _pA=false,_pd0=0,_pzS=0,_pzC=0,_pG=false,_sc=false,_scT=null;
-  function _dist(t){return Math.hypot(t[0].clientX-t[1].clientX,t[0].clientY-t[1].clientY);}
-  window.addEventListener('scroll',function(){_sc=true;clearTimeout(_scT);_scT=setTimeout(function(){_sc=false;},250);},{passive:true});
-  document.body.addEventListener('touchstart',function(e){
-    if(e.touches.length!==2){_pA=false;return;}
-    if(_sc)return;
-    if(document.querySelector('.sync-overlay'))return;
-    var ov=document.getElementById('nhg-overlay');
-    if(ov&&ov.classList.contains('active'))return;
-    var t0=e.touches[0].target,t1=e.touches[1].target;
-    if((t0.closest&&t0.closest('button,a,input,select,label'))||(t1.closest&&t1.closest('button,a,input,select,label')))return;
-    _pA=true;_pd0=_dist(e.touches);_pzS=_zoomLevel;_pzC=_zoomLevel;_pG=false;
-  },{passive:true});
-  document.body.addEventListener('touchmove',function(e){
-    if(!_pA||e.touches.length!==2)return;
-    e.preventDefault();
-    var d=_dist(e.touches)-_pd0;
-    if(Math.abs(d)<15)return;
-    _pG=true;
-    _pzC=Math.min(1.5,Math.max(0.4,_pzS+d/300));
-    document.documentElement.style.zoom=_pzC;
-    var lbl=document.getElementById('_lib_zlbl');
-    if(lbl)lbl.textContent=Math.round(_pzC*100)+'%';
-  },{passive:false});
-  document.body.addEventListener('touchend',function(e){
-    if(!_pA)return;
-    if(e.touches.length<2){
-      if(_pG){
-        _zoomLevel=Math.round(_pzC*10)/10;
-        if(_zoomLevel<0.4)_zoomLevel=0.4;
-        if(_zoomLevel>1.5)_zoomLevel=1.5;
-        document.documentElement.style.zoom=_zoomLevel;
-        localStorage.setItem('pod_zoom',_zoomLevel);
-        _updateZoomLabel();
-      }
-      _pA=false;_pG=false;
-    }
-  },{passive:true});
-})();
 </script>
 <div id="nhg-overlay"><div id="nhg-overlay-bar"><span></span><button id="nhg-overlay-close" title="Kapat">‹</button></div><iframe id="nhg-overlay-frame"></iframe></div>
 <div style="position:fixed;right:8px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;gap:4px;z-index:9998;opacity:0.55;transition:opacity .2s" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.55'" ontouchstart="this.style.opacity='1'" ontouchend="setTimeout(()=>this.style.opacity='0.55',1500)">

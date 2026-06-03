@@ -2541,7 +2541,8 @@ async function openMedia(id) {
       +'if(!_pwa){'
       +'var _vp=document.querySelector("meta[name=viewport]");'
       +'if(_vp&&_vp.content.indexOf("user-scalable")===-1)_vp.content+=",user-scalable=no,maximum-scale=1.0";'
-      +'document.addEventListener("touchmove",function(e){if(e.touches.length>1)e.preventDefault();},{passive:false});'
+      +'(function _dtp(){var _p=document.querySelector(".tr-panel");if(!_p){setTimeout(_dtp,300);return;}'
+      +'_p.addEventListener("touchstart",function(e){if(e.touches.length>=2)e.stopImmediatePropagation();},{capture:true,passive:true});})();'
       +'}'
       +'function _saveZ(){try{var d=JSON.parse(window.name||"{}");d.pod_zoom_off=_z;window.name=JSON.stringify(d);}catch(e){window.name=JSON.stringify({pod_zoom_off:_z});}}'
       +'function _showToast(msg){var t=document.getElementById("_zt");if(!t){t=document.createElement("div");t.id="_zt";t.style.cssText="position:fixed;bottom:72px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.78);color:#fff;padding:6px 14px;border-radius:16px;font-size:13px;z-index:99999;pointer-events:none;transition:opacity .6s;white-space:nowrap";document.body.appendChild(t);}t.textContent=msg;t.style.opacity="1";clearTimeout(t._t);t._t=setTimeout(function(){t.style.opacity="0";},2200);}'
@@ -2560,7 +2561,7 @@ async function openMedia(id) {
       +'if(Math.abs(_z-1)>0.05)setTimeout(function(){_showToast("Zoom: "+Math.round(_z*100)+"%");},600);'
       +'})();<'+'/scr'+'ipt>';
     html=html.includes('</body>')?html.replace('</body>',_zoomInj+'</body>'):html+_zoomInj;
-    if(navigator.standalone===false){html=html.includes('</head>')?html.replace('</head>','<style>body{touch-action:manipulation}</style></head>'):html;}
+    html=html.includes('</head>')?html.replace('</head>','<style>html{font-size:16px!important}'+(navigator.standalone===false?'body{touch-action:manipulation}':'')+'</style></head>'):html;
     if(_blobUrl){URL.revokeObjectURL(_blobUrl);_blobUrl=null;}
     _blobUrl=URL.createObjectURL(new Blob([html],{type:'text/html'}));
     location.href=_blobUrl;

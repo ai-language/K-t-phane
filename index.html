@@ -2543,10 +2543,8 @@ async function openMedia(id) {
       +'if(_vp&&_vp.content.indexOf("user-scalable")===-1)_vp.content+=",user-scalable=no,maximum-scale=1.0";'
       +'(function _dtp(){var _p=document.querySelector(".tr-panel");if(!_p){setTimeout(_dtp,300);return;}'
       +'_p.addEventListener("touchstart",function(e){if(e.touches.length>=2)e.stopImmediatePropagation();},{capture:true,passive:true});'
-      // double-tap zoom engeli + pinch sonrası click engeli
       +'_p.style.touchAction="manipulation";'
-      +'var _lm=0;'
-      +'document.addEventListener("touchstart",function(e){if(e.touches.length>=2)_lm=Date.now();},{capture:true,passive:true});'
+      +'var _lm=0;document.addEventListener("touchstart",function(e){if(e.touches.length>=2)_lm=Date.now();},{capture:true,passive:true});'
       +'_p.addEventListener("click",function(e){if(Date.now()-_lm<600){e.stopImmediatePropagation();e.preventDefault();}},{capture:true});'
       +'})();'
       +'}'

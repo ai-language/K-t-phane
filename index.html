@@ -2532,7 +2532,7 @@ async function openMedia(id) {
   +'})();<'+'/scr'+'ipt>';
   html=html.includes('</body>')?html.replace('</body>',inj+clipInj+'</body>'):html+inj+clipInj;
   if(isIOS){
-    if(navigator.standalone===false){var _liw=window.innerWidth;html=html.replace('width=device-width','width='+_liw);}
+    if(navigator.standalone===false){var _liw=window.innerWidth;html=html.replace('width=device-width','width='+_liw);html=html.replace('initial-scale=1.0','initial-scale=1.0,user-scalable=no');}
     var _pz=(typeof _zoomOffline!=='undefined'?_zoomOffline:1);
     var _zoomInj='<scr'+'ipt>(function(){'
       +'var _z='+_pz.toFixed(2)+',_min=0.4,_max=1.5,_step=0.1,_pwa=!!navigator.standalone;'

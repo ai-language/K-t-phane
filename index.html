@@ -2536,7 +2536,7 @@ async function openMedia(id) {
     var _pz=(typeof _zoomOffline!=='undefined'?_zoomOffline:1);
     var _zoomInj='<scr'+'ipt>(function(){'
       +'var _z='+_pz.toFixed(2)+',_min=0.4,_max=1.5,_step=0.1,_pwa=!!navigator.standalone;'
-      +'function _applyZ(v){document.documentElement.style.zoom=v;}'
+      +'function _applyZ(v){if(_pwa)document.documentElement.style.zoom=v;else document.body.style.zoom=v;}'
       +'_applyZ(_z);'
       +'if(!_pwa){'
       +'var _vp=document.querySelector("meta[name=viewport]");'

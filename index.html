@@ -2505,7 +2505,7 @@ async function openMedia(id) {
       +'if(_t>0){a.addEventListener("canplay",function _s(){a.currentTime=_t;a.removeEventListener("canplay",_s);},{once:true});}'
       +'a.addEventListener("timeupdate",function(){var n=Math.floor(a.currentTime);if(n===_x)return;_x=n;'
       +(isIOS
-        ?'try{localStorage.setItem("nhg_pos_"+_id,n);}catch(e){}try{window.name=JSON.stringify({nhg:1,id:_id,t:n});}catch(e){}'
+        ?'try{localStorage.setItem("nhg_pos_"+_id,n);}catch(e){}try{var _wn={};try{_wn=JSON.parse(window.name||"{}")}catch(e){}; _wn.nhg=1;_wn.id=_id;_wn.t=n;window.name=JSON.stringify(_wn);}catch(e){}'
         :'try{window.parent.postMessage({nhg:1,id:_id,t:n},"*");}catch(e){}'
       )+'});'
     +'}'

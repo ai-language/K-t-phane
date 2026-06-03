@@ -2505,7 +2505,7 @@ async function openMedia(id) {
       +'if(_t>0){a.addEventListener("canplay",function _s(){a.currentTime=_t;a.removeEventListener("canplay",_s);},{once:true});}'
       +'a.addEventListener("timeupdate",function(){var n=Math.floor(a.currentTime);if(n===_x)return;_x=n;'
       +(isIOS
-        ?'try{localStorage.setItem("nhg_pos_"+_id,n);}catch(e){}try{window.name=JSON.stringify({nhg:1,id:_id,t:n});}catch(e){}'
+        ?'try{localStorage.setItem("nhg_pos_"+_id,n);}catch(e){}try{window.name=JSON.stringify({nhg:1,id:_id,t:n,pod_zoom_off:window._podZoom||1});}catch(e){}'
         :'try{window.parent.postMessage({nhg:1,id:_id,t:n},"*");}catch(e){}'
       )+'});'
     +'}'
@@ -2536,7 +2536,7 @@ async function openMedia(id) {
     var _pz=(typeof _zoomOffline!=='undefined'?_zoomOffline:1);
     var _zoomInj='<scr'+'ipt>(function(){'
       +'var _z='+_pz.toFixed(2)+',_min=0.4,_max=1.5,_step=0.1,_pwa=!!navigator.standalone;'
-      +'function _applyZ(v){if(_pwa)document.documentElement.style.zoom=v;else document.body.style.zoom=v;}'
+      +'function _applyZ(v){if(_pwa)document.documentElement.style.zoom=v;else document.body.style.zoom=v;window._podZoom=v;}'
       +'_applyZ(_z);'
       +'if(!_pwa){'
       +'var _vp=document.querySelector("meta[name=viewport]");'
@@ -2559,7 +2559,6 @@ async function openMedia(id) {
       +'document.getElementById("_zbout").addEventListener("click",function(){_adjZ(-0.1);});'
       +'document.getElementById("_zbl").addEventListener("click",function(){_z=1;_applyZ(1);this.textContent="100%";_showToast("Zoom: 100%");_saveZ();});'
       +'if(Math.abs(_z-1)>0.05)setTimeout(function(){_showToast("Zoom: "+Math.round(_z*100)+"%");},600);'
-      +'window.addEventListener("pagehide",function(){try{var d=JSON.parse(window.name||"{}");d.pod_zoom_off=_z;window.name=JSON.stringify(d);}catch(e){window.name=JSON.stringify({pod_zoom_off:_z});}});'
       +'})();<'+'/scr'+'ipt>';
     html=html.includes('</body>')?html.replace('</body>',_zoomInj+'</body>'):html+_zoomInj;
     if(navigator.standalone===false){html=html.includes('</head>')?html.replace('</head>','<style>body{touch-action:manipulation}</style></head>'):html;}

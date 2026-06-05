@@ -3038,10 +3038,36 @@ function adjZoom(d){
 _updateZoomLabel();
 </script>
 <div id="nhg-overlay"><div id="nhg-overlay-bar"><span></span><button id="nhg-overlay-close" title="Kapat">‹</button></div><iframe id="nhg-overlay-frame"></iframe></div>
-<div style="position:fixed;right:8px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;gap:4px;z-index:9998;opacity:0.55;transition:opacity .2s" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.55'" ontouchstart="this.style.opacity='1'" ontouchend="setTimeout(()=>this.style.opacity='0.55',1500)">
-  <button onclick="adjZoom(0.1)" style="width:34px;height:34px;background:rgba(0,0,0,.65);color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer;line-height:1;-webkit-tap-highlight-color:transparent">A+</button>
-  <span id="_lib_zlbl" onclick="adjZoom(1-_zoomLevel)" style="font-size:11px;color:#fff;background:rgba(0,0,0,.55);border-radius:10px;padding:2px 5px;cursor:pointer;-webkit-tap-highlight-color:transparent">100%</span>
-  <button onclick="adjZoom(-0.1)" style="width:34px;height:34px;background:rgba(0,0,0,.65);color:#fff;border:none;border-radius:8px;font-size:13px;cursor:pointer;line-height:1;-webkit-tap-highlight-color:transparent">A−</button>
+<div id="_zoom_wrap" style="position:fixed;right:0;top:50%;transform:translateY(-50%) translateX(calc(100% - 13px));display:flex;flex-direction:row;align-items:center;z-index:9998;transition:transform .3s cubic-bezier(.4,0,.2,1)">
+  <div id="_zoom_tab" style="width:13px;height:72px;background:rgba(26,107,60,.82);border-radius:7px 0 0 7px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;-webkit-tap-highlight-color:transparent">
+    <span style="color:#fff;font-size:10px;line-height:1">‹</span>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:5px;background:rgba(0,0,0,.72);padding:10px 7px;border-radius:0 0 0 10px">
+    <button onclick="adjZoom(0.1)" style="width:36px;height:36px;background:rgba(255,255,255,.12);color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer;line-height:1;-webkit-tap-highlight-color:transparent">A+</button>
+    <span id="_lib_zlbl" onclick="adjZoom(1-_zoomLevel)" style="font-size:11px;color:#fff;background:rgba(255,255,255,.15);border-radius:10px;padding:3px 6px;cursor:pointer;-webkit-tap-highlight-color:transparent;min-width:32px;text-align:center">100%</span>
+    <button onclick="adjZoom(-0.1)" style="width:36px;height:36px;background:rgba(255,255,255,.12);color:#fff;border:none;border-radius:8px;font-size:13px;cursor:pointer;line-height:1;-webkit-tap-highlight-color:transparent">A−</button>
+  </div>
 </div>
+<script>
+(function(){
+  var w=document.getElementById('_zoom_wrap');
+  var t=document.getElementById('_zoom_tab');
+  var _zt=null;
+  function open(){
+    w.style.transform='translateY(-50%) translateX(0)';
+    t.style.transform='rotate(180deg)';
+    clearTimeout(_zt);
+    _zt=setTimeout(close,2500);
+  }
+  function close(){
+    w.style.transform='translateY(-50%) translateX(calc(100% - 13px))';
+    t.style.transform='';
+  }
+  w.addEventListener('mouseenter',function(){open();clearTimeout(_zt);});
+  w.addEventListener('mouseleave',function(){_zt=setTimeout(close,1200);});
+  w.addEventListener('touchstart',function(e){open();e.stopPropagation();},{passive:true});
+  w.addEventListener('click',function(){open();});
+})();
+</script>
 </body>
 </html>

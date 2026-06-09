@@ -2559,7 +2559,7 @@ async function openMedia(id) {
       +'document.getElementById("_zbl").addEventListener("click",function(){_z=1;document.documentElement.style.zoom=1;this.textContent="100%";_showToast("Zoom: 100%");_saveZ();});'
       +'if(Math.abs(_z-1)>0.05)setTimeout(function(){_showToast("Zoom: "+Math.round(_z*100)+"%");},600);'
       +'})();<'+'/scr'+'ipt>';
-    var _earlyZoomInj='<scr'+'ipt>document.documentElement.style.zoom='+_pz.toFixed(2)+';<'+'/scr'+'ipt>';
+    var _earlyZoomInj='<scr'+'ipt>document.documentElement.style.zoom='+_pz.toFixed(2)+';window.addEventListener("DOMContentLoaded",function(){setTimeout(function(){window.dispatchEvent(new Event("resize"));},100);});<'+'/scr'+'ipt>';
     if(html.includes('</head>'))html=html.replace('</head>',_earlyZoomInj+'</head>');
     html=html.includes('</body>')?html.replace('</body>',_zoomInj+'</body>'):html+_zoomInj;
     if(_blobUrl){URL.revokeObjectURL(_blobUrl);_blobUrl=null;}

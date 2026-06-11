@@ -2535,7 +2535,7 @@ async function openMedia(id) {
     var _pz=(typeof _zoomLevel!=='undefined'?_zoomLevel:1);
     var _isPWALib=(window.navigator.standalone===true)||(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches);
     var _zoomInj='<scr'+'ipt>(function(){'
-      +'var _z='+_pz.toFixed(2)+',_min=0.7,_max=1.5,_step=0.1;'
+      +'var _z='+_pz.toFixed(2)+',_min=0.5,_max=1.5,_step=0.1;'
       +'var _isPWA='+(_isPWALib?'true':'false')+';'
       +'document.documentElement.style.zoom=_z;'
       +'function _saveZ(){try{var d=JSON.parse(window.name||"{}");d.pod_zoom=_z;window.name=JSON.stringify(d);}catch(e){window.name=JSON.stringify({pod_zoom:_z});}}'
@@ -2572,7 +2572,7 @@ async function openMedia(id) {
   } else {
     var _pzD=(typeof _zoomLevel!=='undefined'?_zoomLevel:1);
     var _zInjD='<scr'+'ipt>(function(){'
-      +'var _z='+_pzD.toFixed(2)+',_min=0.7,_max=1.5;'
+      +'var _z='+_pzD.toFixed(2)+',_min=0.5,_max=1.5;'
       +'document.documentElement.style.zoom=_z;'
       +'function _showToast(msg){var t=document.getElementById("_zt");if(!t){t=document.createElement("div");t.id="_zt";t.style.cssText="position:fixed;bottom:72px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.78);color:#fff;padding:6px 14px;border-radius:16px;font-size:13px;z-index:99999;pointer-events:none;transition:opacity .6s;white-space:nowrap";document.body.appendChild(t);}t.textContent=msg;t.style.opacity="1";clearTimeout(t._t);t._t=setTimeout(function(){t.style.opacity="0";},2200);}'
       +'function _adjZ(d){_z=Math.min(_max,Math.max(_min,parseFloat((_z+d).toFixed(1))));document.documentElement.style.zoom=_z;var lbl=document.getElementById("_zbl");if(lbl)lbl.textContent=Math.round(_z*100)+"%";_showToast("Zoom: "+Math.round(_z*100)+"%");}'
@@ -3068,7 +3068,7 @@ var _zoomLevel=parseFloat(localStorage.getItem('pod_zoom')||'1');
 document.documentElement.style.zoom=_zoomLevel;
 function _updateZoomLabel(){var l=document.getElementById('_lib_zlbl');if(l)l.textContent=Math.round(_zoomLevel*100)+'%';}
 function adjZoom(d){
-  _zoomLevel=Math.min(1.5,Math.max(0.7,parseFloat((_zoomLevel+d).toFixed(1))));
+  _zoomLevel=Math.min(1.5,Math.max(0.5,parseFloat((_zoomLevel+d).toFixed(1))));
   document.documentElement.style.zoom=_zoomLevel;
   localStorage.setItem('pod_zoom',_zoomLevel);
   _updateZoomLabel();

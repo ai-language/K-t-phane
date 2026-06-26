@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "note": "BI Dersleri icin sunucu indirme haritasi. Icerik sonraki adimda eklenecek. Bos = no-op.",
+  "_example": {
+    "bitem_0_0_0": { "url": "https://ornek-host3.netlify.app/bi-ders-1.html", "size": 15000000 }
+  },
+  "items": {}
+}

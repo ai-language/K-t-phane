@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "note": "NHG-Richtlijnen icin sunucu indirme haritasi. Bos birakirsan UYGULAMA ETKILENMEZ (manuel ZIP/medya import calismaya devam eder). Bir baslik eklemek icin: item ID'sini (uygulamadaki data-id) anahtar yap, indirilecek HTML dosyasinin TAM URL'ini ver. URL herhangi bir ucretsiz host olabilir (Netlify / GitHub Release / Cloudflare / jsDelivr) => ayni manifest icinde farkli host'lar = limitleri asmadan coklu sunucu.",
+  "_example": {
+    "item_0_0_0": { "url": "https://ornek-host.netlify.app/kinderen-met-koorts.html", "size": 18234567 }
+  },
+  "items": {}
+}

@@ -125,8 +125,8 @@
   .lib-view{ display:none; }
   .lib-view.active{ display:block; }
 
-  #hub{ display:none; min-height:100vh; min-height:100dvh; padding:46px 20px; background:linear-gradient(160deg,#0f1419,#1b2430); }
-  #hub.active{ display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  #hub{ display:none; position:fixed; inset:0; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:max(46px,calc(env(safe-area-inset-top,0px) + 20px)) 20px max(46px,calc(env(safe-area-inset-bottom,0px) + 20px)); background:linear-gradient(160deg,#0f1419,#1b2430); }
+  #hub.active{ display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100%; }
   .hub-title{ color:#fff; font-size:1.7rem; font-weight:800; letter-spacing:.4px; margin-bottom:7px; text-align:center; }
   .hub-sub{ color:rgba(255,255,255,.5); font-size:.92rem; margin-bottom:36px; text-align:center; line-height:1.5; }
   .hub-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; width:100%; max-width:940px; }
